@@ -16,11 +16,13 @@
 <iron-localstorage name="oidc-access-token" value="{{accessToken}}" use-raw></iron-localstorage>
 
 <div hidden$="[[accessToken]]">
-<slot name="login">
-<template is="dom-repeat" items="[[providerList]]">
-<paper-button on-click="_internalLogin">Login with [[item.name]]</paper-button>
-</template>
-</slot>
+	<slot name="login">
+		<template is="dom-repeat" items="[[providerList]]">
+			<paper-button on-click="_internalLogin">
+				Login<template is="dom-if" if="{{item.name}}"> with [[item.name]]</template>
+			</paper-button>
+		</template>
+	</slot>
 </div>
 
 <div hidden$="[[!accessToken]]">
