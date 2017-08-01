@@ -40,11 +40,30 @@ class OIDCLogin extends Polymer.Element {
 
 	static get properties() {
 		return {
-			accessToken: { type: Object, notify: true, reflectToAttribute: true },
-			provider: { type: String },
-			redirectUri: { type: String, value: '/login-callback.html' },
-			scope: { type: String, value: 'openid profile email' },
-			providerList: { type: Array, value: [] },
+			accessToken: { 
+				type: Object, 
+				readOnly: true,
+				notify: true, 
+				reflectToAttribute: true 
+			},
+			provider: { 
+				type: String,
+				readOnly: true,
+				notify: true,
+				reflectToAttribute: true
+			},
+			redirectUri: { 
+				type: String, 
+				value: '/login-callback.html'
+			},
+			scope: { 
+				type: String,
+				value: 'openid profile email' 
+			},
+			providerList: { 
+				type: Array, 
+				value: [] 
+			},
 		};
 	}
 	
