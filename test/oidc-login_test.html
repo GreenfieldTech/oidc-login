@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>oidc-login test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../oidc-login.html">
+  </head>
+  <body>
+
+    <test-fixture id="BasicTestFixture">
+      <template>
+        <oidc-login></oidc-login>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="ChangedPropertyTestFixture">
+      <template>
+        <oidc-login prop1="new-prop1"></oidc-login>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('oidc-login', function() {
+
+        test('instantiating the element with default properties works', function() {
+          var element = fixture('BasicTestFixture');
+          assert.equal(element.prop1, 'oidc-login');
+          var elementShadowRoot = element.shadowRoot;
+          var elementHeader = elementShadowRoot.querySelector('h2');
+          assert.equal(elementHeader.innerHTML, 'Hello oidc-login!');
+        });
+
+        test('setting a property on the element works', function() {
+          // Create a test fixture
+          var element = fixture('ChangedPropertyTestFixture');
+          assert.equal(element.prop1, 'new-prop1');
+          var elementShadowRoot = element.shadowRoot;
+          var elementHeader = elementShadowRoot.querySelector('h2');
+          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+        });
+
+      });
+    </script>
+
+  </body>
+</html>

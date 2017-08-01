@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://cdn.rawgit.com/GluuFederation/openid-implicit-client/master/openidconnect.js"></script>
+
+<style>
+.container {}
+</style>
+
+<script>
+//Fix bug in OIDC
+OIDC.getAccessToken = function()
+{
+    try {
+      var url = window.location.href;
+      // Check for token
+      var token = url.match('[?#&]access_token=([^&]*)');
+      if (token)
+        return token[1];
+      else
+        console.error(new Error("No access_token found on current page URL!"));
+        return null;
+    } catch (e) {
+        throw new OidcException('Unable to get the Access Token from the current page URL: ' + e.toString());
+        return null;
+    }
+}
+</script>
+
+<script>
+	OIDC.restoreInfo();
+	var id_token = OIDC.getValidIdToken();
+	var access_token = OIDC.getAccessToken();
+	
+	window.localStorage['oidc-access-token'] = access_token;
+	window.location.href = '/';
+	
+	/*
+	var tokenClaims = JSON.parse(OIDC.getIdTokenParts(id_token)[1]);
+	var userInfoClaims = JSON.parse(OIDC.getUserInfo(access_token));
+	*/
+</script>
+</head>
+
+<body>
+</body>
+</html>

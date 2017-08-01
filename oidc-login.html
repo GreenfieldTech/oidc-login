@@ -1,0 +1,97 @@
+<link rel="import" href="./bower_components/polymer/polymer-element.html">
+<link rel="import" href="./bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="./bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="./oidc-login-provider.html">
+
+<dom-module id="oidc-login">
+<template strip-whitespace>
+
+<style>
+:host {
+	display: block;
+}
+</style>
+
+<iron-localstorage name="oidc-access-token" value="{{accessToken}}" use-raw></iron-localstorage>
+
+<div hidden$="[[accessToken]]">
+<slot name="login">
+<template is="dom-repeat" items="{{providerList}}">
+<paper-button on-click="_internalLogin">Login with [[item.name]]</paper-button>
+</template>
+</slot>
+</div>
+
+<div hidden$="[[!accessToken]]">
+<slot></slot>
+</div>
+
+</template>
+
+<script src="https://cdn.rawgit.com/GluuFederation/openid-implicit-client/master/openidconnect.js"></script>
+<script>
+
+class OIDCLogin extends Polymer.Element {
+
+	static get is() { return "oidc-login"; }
+
+	static get properties() {
+		return {
+			accessToken: { type: Object, notify: true, reflectToAttribute: true },
+			provider: { type: String },
+			redirectUri: { type: String, value: '/login-callback.html' },
+			scope: { type: String, value: 'openid profile email' },
+			providerList: { type: Array, value: [] },
+		};
+	}
+	
+	constructor() {
+		super();
+	}
+	
+	logout() {
+		this.set('accessToken', null);
+	}
+	
+	login(provider) {
+		// choose provider from the list
+		if (provider) {
+			provider = this.providerList.find(function(p) { return p.getAttribute('name') == provider; });
+		} else {
+			// or default (first) provider if none specified
+			provider = this.providerList[0];
+		}
+		if (!provider)
+			return;
+		// init the found provider and start a login session
+		provider.init(this.redirectUri);
+		OIDC.login({scope: this.scope, response_type: 'token id_token'});
+	}
+	
+	connectedCallback() {
+		super.connectedCallback();
+		// collect provider nodes
+		this._observer = new Polymer.FlattenedNodesObserver(this, function(info) {
+			(info.addedNodes || []).forEach(function (n){
+				if (n.localName != 'oidc-login-provider') return;
+				this.providerList.push(n);
+			}.bind(this));
+		});
+	}
+	
+	disconnectedCallback() {
+		super.disconnectedCallback();
+		this._observer.disconnect();
+		this._provders = [];
+	}
+	
+	_internalLogin(e) {
+		this.login(e.model.item.name);
+	}
+}
+
+customElements.define(OIDCLogin.is, OIDCLogin);
+</script>
+
+</dom-module>

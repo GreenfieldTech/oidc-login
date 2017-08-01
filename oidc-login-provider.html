@@ -1,0 +1,42 @@
+<dom-module id="kappas-login-provider">
+
+<template>
+<style>
+:host {
+	display: none;
+}
+</style>
+
+</template>
+
+<script>
+
+class OIDCLoginProvider extends Polymer.Element {
+	
+	static get is() { return 'oidc-login-provider'; }
+	
+	static get properties() {
+		return {
+			name: { type: String },
+			discovery: { type: String },
+			clientId: { type: String },
+			redirectUri: { type: String },
+		}
+	}
+	
+	init(globalRedirectUri) {
+		if (!this.redirectUri)
+			this.redirectUri = globalRedirectUri;
+		if (!this.redirectUri.match(/^(https?:)?\/\//))
+			this.redirectUri = window.location.protocol + "//" + window.location.host + this.redirectUri;
+		var clientInfo = { client_id : this.clientId, redirect_uri: this.redirectUri };
+		var providerInfo = OIDC.discover(this.discovery);
+		OIDC.setClientInfo( clientInfo );
+		OIDC.setProviderInfo( providerInfo );
+		OIDC.storeInfo(providerInfo, clientInfo);
+	}
+}
+customElements.define(OIDCLoginProvider.is, OIDCLoginProvider);
+</script>
+
+</dom-module>
