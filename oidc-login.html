@@ -14,6 +14,7 @@
 </style>
 
 <iron-localstorage name="oidc-login-access-token" value="{{accessToken}}" use-raw></iron-localstorage>
+<iron-localstorage name="oidc-login-id-token" value="{{idToken}}" use-raw></iron-localstorage>
 
 <div hidden$="[[accessToken]]">
 	<slot name="login">
@@ -41,6 +42,13 @@ class OIDCLogin extends Polymer.Element {
 	static get properties() {
 		return {
 			accessToken: { 
+				type: Object, 
+				notify: true, 
+				reflectToAttribute: true,
+				observer: '_accessTokenReceived',
+				value: false,
+			},
+			idToken: { 
 				type: Object, 
 				notify: true, 
 				reflectToAttribute: true,
@@ -114,10 +122,12 @@ class OIDCLogin extends Polymer.Element {
 	}
 	
 	_accessTokenReceived() {
-		if (!this.accessToken)
+		if (!this.accessToken || !this.idToken)
 			return;
 		window.requestAnimationFrame(function(elm) {
-			this.dispatchEvent(new CustomEvent('oidc-login-success',{ accessToken: this.accessToken }));
+			this.dispatchEvent(new CustomEvent('oidc-login-success',{ 
+				detail: { accessToken: this.accessToken, idToken: this.idToken } 
+				}));
 		}.bind(this));
 	}
 }
