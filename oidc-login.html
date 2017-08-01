@@ -13,7 +13,7 @@
 }
 </style>
 
-<iron-localstorage name="oidc-access-token" value="{{accessToken}}" use-raw></iron-localstorage>
+<iron-localstorage name="oidc-login-access-token" value="{{accessToken}}" use-raw></iron-localstorage>
 
 <div hidden$="[[accessToken]]">
 	<slot name="login">
