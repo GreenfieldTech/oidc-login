@@ -5,7 +5,7 @@ An OpenID Connect client-side login web component built with and for Polymer 2
 ## Install
 
 ```
-bower install --save greenfieldtech/oidc-login
+bower install --save oidc-login
 ```
 
 ## Usage
