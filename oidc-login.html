@@ -32,7 +32,10 @@
 
 </template>
 
+<!-- 
 <script src="https://cdn.rawgit.com/GluuFederation/openid-implicit-client/master/openidconnect.js"></script>
+ -->
+ <script src="./openidconnect.js"></script>
 <script>
 
 class OIDCLogin extends Polymer.Element {
@@ -69,6 +72,7 @@ class OIDCLogin extends Polymer.Element {
 				type: String,
 				value: 'openid profile email' 
 			},
+			popup: Boolean,
 			providerList: { 
 				type: Array, 
 				value: [] 
@@ -97,7 +101,23 @@ class OIDCLogin extends Polymer.Element {
 		// init the found provider and start a login session
 		provider.init(this.redirectUri);
 		this.set('provider', provider.name);
-		OIDC.login({scope: this.scope, response_type: 'token id_token'});
+		
+		if (!this.popup) {
+			OIDC.login({scope: this.scope, response_type: 'token id_token'});
+			return; // shouldn't be needed because OIDC.login replaces current window
+		}
+		
+		window.addEventListener('message', this._popupHandler = this.handlePopupMessage.bind(this))
+		OIDC.login({scope: this.scope, response_type: 'token id_token', 
+			window: 'modal'});
+	}
+	
+	handlePopupMessage(m) {
+		if (m.data != 'oidc-login-callback-complete')
+			return;
+		m.source.postMessage('oidc-login-callback-complete-received','*');
+		window.removeEventLister('message', this._popupHandler);
+		delete this._popupHandler;
 	}
 	
 	connectedCallback() {

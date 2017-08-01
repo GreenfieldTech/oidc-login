@@ -86,6 +86,9 @@ element's content will be displayed, and an `oidc-login-success` event will be s
    specified in the `<oidc-login-provider>` element.
  * `scope` : The OAuth 2.0 scope to retrieve from the server.
    Default: `openid profile email`.
+ * `popup` : Boolean - whether to create a pop-up window to perform the authentication
+   instead of exiting the application and redirecting the browser window. 
+   Default: false
  * `redirect-uri` : The stand-alone page in the application that will read the OpenID
    access token from all providers.
    Default: `/login-callback.html`.
