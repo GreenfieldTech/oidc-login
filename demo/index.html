@@ -6,10 +6,14 @@
 
     <title>oidc-login demo</title>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../bower_components/iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../bower_components/polymer/polymer-element.html">
+	<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+	<link rel="import" href="../bower_components/paper-button/paper-button.html">
+    
     <link rel="import" href="../oidc-login.html">
 
     <custom-style>
@@ -22,9 +26,25 @@
       <h3>Basic oidc-login demo</h3>
       <demo-snippet>
         <template>
-          <oidc-login></oidc-login>
+          <oidc-login id="oidc">
+          
+          	<oidc-login-provider name="google" discovery="https://accounts.google.com"
+				client-id="client-id-from-google"></oidc-login-provider>
+        
+	        <paper-card>
+	        	Hello World!
+	        </paper-card>
+          
+          </oidc-login>
         </template>
       </demo-snippet>
     </div>
+    <script>
+    function sayHello() {
+    	alert('Logged in');
+    }
+    document.getElementById('oidc').addEventListener('oidc-login-success', sayHello);
+    
+    </script>
   </body>
 </html>
