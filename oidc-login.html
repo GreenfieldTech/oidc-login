@@ -124,11 +124,20 @@ class OIDCLogin extends Polymer.Element {
 	_accessTokenReceived() {
 		if (!this.accessToken || !this.idToken)
 			return;
-		window.requestAnimationFrame(function(elm) {
-			this.dispatchEvent(new CustomEvent('oidc-login-success',{ 
-				detail: { accessToken: this.accessToken, idToken: this.idToken } 
+		// wait with firing until the animation frame, to allow the DOM to finish loading,
+		// and our clients to register, as we normally fire really early because
+		// local storage is fast that way
+		window.requestAnimationFrame(() => this.sendSuccess());
+	}
+	
+	sendSuccess() {
+		this._debouncer = Polymer.Debouncer.debounce(this._debouncer,
+		    Polymer.Async.timeOut.after(250),
+			() => { 
+				this.dispatchEvent(new CustomEvent('oidc-login-success',{ 
+					detail: { accessToken: this.accessToken, idToken: this.idToken } 
 				}));
-		}.bind(this));
+			});
 	}
 }
 
