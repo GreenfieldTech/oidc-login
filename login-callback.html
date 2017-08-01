@@ -32,8 +32,19 @@ OIDC.getAccessToken = function()
 	var id_token = OIDC.getValidIdToken();
 	var access_token = OIDC.getAccessToken();
 	
-	window.localStorage['oidc-access-token'] = access_token;
-	window.location.href = '/';
+	window.localStorage['oidc-login-id-token'] = id_token;
+	window.localStorage['oidc-login-access-token'] = access_token;
+	
+	window.location.query = window.location.search.split(/[?&]/).filter(v => v).map(v => v.split('=').map(v => decodeURIComponent(v))).reduce(function(o,v){ o[v[0]] = v[1]; return o}, {});
+	
+	if (window.opener) { // are we in a popup ?
+		window.addEventListener('message', window.close.bind(window));
+		window.opener.postMessage('oidc-login-callback-complete', '*');
+		window.setTimeout(function(){
+			window.location.href = (window.location.query.target || '/');
+		}, 750);
+	} else
+		window.location.href = (window.location.query.target || '/');
 	
 	/*
 	var tokenClaims = JSON.parse(OIDC.getIdTokenParts(id_token)[1]);

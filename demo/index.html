@@ -13,11 +13,24 @@
     <link rel="import" href="../bower_components/polymer/polymer-element.html">
 	<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 	<link rel="import" href="../bower_components/paper-button/paper-button.html">
+	<link rel="import" href="../bower_components/paper-card/paper-card.html">
+	<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+    
+    <script src="../bower_components/openid-implicit-client/openidconnect.js"></script>
     
     <link rel="import" href="../oidc-login.html">
 
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
+      paper-card {
+      	width: 20em;
+      	padding: 1em;
+      	display: block;
+      	margin: .7em;
+      }
+      paper-card div {
+      	margin: .7em;
+      }
       </style>
     </custom-style>
   </head>
@@ -26,24 +39,34 @@
       <h3>Basic oidc-login demo</h3>
       <demo-snippet>
         <template>
-          <oidc-login id="oidc">
+          <oidc-login id="oidc" popup>
           
           	<oidc-login-provider name="google" discovery="https://accounts.google.com"
-				client-id="client-id-from-google"></oidc-login-provider>
+				client-id="728894164789-n2hvmpgdogl9cqmqp2vcdeicte08djem.apps.googleusercontent.com"></oidc-login-provider>
         
 	        <paper-card>
 	        	Hello World!
-	        </paper-card>
-          
+
+				<div>
+	         	<paper-button raised onclick="logout()">Logout</paper-button>
+				</div>
+        	</paper-card>
           </oidc-login>
+          
+          <paper-toast id="toast" text="Logged in!"></paper-toast>
+          
         </template>
       </demo-snippet>
     </div>
     <script>
+    var oidc = document.getElementById('oidc');
     function sayHello() {
-    	alert('Logged in');
+    	document.getElementById('toast').open();
     }
-    document.getElementById('oidc').addEventListener('oidc-login-success', sayHello);
+    function logout() {
+    	oidc.logout();
+    }
+    oidc.addEventListener('oidc-login-success', sayHello);
     
     </script>
   </body>

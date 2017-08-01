@@ -5,7 +5,7 @@ An OpenID Connect client-side login web component built with and for Polymer 2
 ## Install
 
 ```
-bower install --save greenfieldtech/oidc-login
+bower install --save oidc-login
 ```
 
 ## Usage
@@ -78,9 +78,17 @@ element's content will be displayed, and an `oidc-login-success` event will be s
 
 ### Supported Properties
 
- * `access-token` : This read-only property returns the OpenID Connect provider's access token after a successful authentication.
- * `provider` : This read-only property returns the OpenID Connect providers name as specified in the `<oidc-login-provider>` element.
- * `scope` : The OAuth 2.0 scope to retrieve from the server. Default: `openid profile email`.
+ * `id-token` : This read-only property returns the authenticated user's id token
+   after a successful authentication, or false if there is no authenticated user.
+ * `access-token` : This read-only property returns the authenticated user's access
+   token after a successful authentication, or false if there is no authenticated user.
+ * `provider` : This read-only property returns the OpenID Connect provider's name as
+   specified in the `<oidc-login-provider>` element.
+ * `scope` : The OAuth 2.0 scope to retrieve from the server.
+   Default: `openid profile email`.
+ * `popup` : Boolean - whether to create a pop-up window to perform the authentication
+   instead of exiting the application and redirecting the browser window. 
+   Default: false
  * `redirect-uri` : The stand-alone page in the application that will read the OpenID
    access token from all providers.
    Default: `/login-callback.html`.
@@ -94,6 +102,12 @@ element's content will be displayed, and an `oidc-login-success` event will be s
  * `redirect-uri` : The stand-alone page in the application that will read the OpenID 
    Connect access token from this provider.
    Default: the global `redirect-uri` setting.
+
+### `oidc-login-success` Event Properties
+
+ * `detail` : An object containing two fields:
+   * `idToken` : the authenticated user's ID token.
+   * `accessToken` : the authenticated user's access token.
 
 ## Advanced Topics
 
