@@ -2,6 +2,8 @@
 <link rel="import" href="../iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../paper-button/paper-button.html">
 
+<script src="../openid-implicit-client/openidconnect.min.js"></script>
+
 <link rel="import" href="./oidc-login-provider.html">
 
 <dom-module id="oidc-login">
@@ -32,10 +34,6 @@
 
 </template>
 
-<!-- 
-<script src="https://cdn.rawgit.com/GluuFederation/openid-implicit-client/master/openidconnect.js"></script>
- -->
- <script src="./openidconnect.js"></script>
 <script>
 
 class OIDCLogin extends Polymer.Element {
