@@ -73,4 +73,63 @@ window.customElements.define(KappasApp.is, KappasApp);
  * `discovery` : The OpenID Connect discovery URL for the provider. 
  * `client-id` : The OpenID Connect client token received from the provider.
  * `redirect-url` : Allow to override the non-default callback page URI on a per-provider basis.
- 
+
+## Advanced Topics
+
+### Custom Login Screen
+
+The login screen (where the "login with..." buttons live) can be customized by adding
+a slot implementation named "login". With the additional slot, the application needs
+to manage the login flow and call the `oidc-login` API to start the login process.
+
+#### Example:
+
+```
+<dom-module id="my-app">
+<template>
+	<style>
+	:host {
+		display: block;
+	}
+	</style>
+
+	<oidc-login access-token="{{accessToken}}" id="oidc">
+		<oidc-login-provider name="google" discovery="https://accounts.google.com"
+			client-id="client-id-from-google"></oidc-login-provider>
+
+		<paper-card slot="login">
+			<paper-button on-click="doLogin">Login With G+</paper-button>
+		</paper-card>
+
+		<paper-card>
+		<h2>Hello World!</h2>
+		<p>Access Token: [[accessToken]]</p>
+		<paper-button on-click="doLogout">Logout</paper-button>
+		</paper-card>
+
+	</oidc-login>
+</template>
+
+<script>
+class MyApp extends Polymer.Element {
+	static get is() { return 'my-app'; }
+	
+	static get properties() {
+		return {
+			accessToken: { type: String }
+		};
+	}
+	
+	doLogin() {
+		this.$.oidc.login('google');
+	}
+	
+	doLogout() {
+		this.$.oidc.logout();
+	}
+}
+window.customElements.define(KappasApp.is, KappasApp);
+
+</script>
+</dom-module>
+```
