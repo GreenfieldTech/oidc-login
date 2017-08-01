@@ -26,7 +26,7 @@
 </div>
 
 <div hidden$="[[!accessToken]]">
-<slot></slot>
+<slot id="mainContent"></slot>
 </div>
 
 </template>
@@ -42,9 +42,10 @@ class OIDCLogin extends Polymer.Element {
 		return {
 			accessToken: { 
 				type: Object, 
-				readOnly: true,
 				notify: true, 
-				reflectToAttribute: true 
+				reflectToAttribute: true,
+				observer: '_accessTokenReceived',
+				value: false,
 			},
 			provider: { 
 				type: String,
@@ -87,6 +88,7 @@ class OIDCLogin extends Polymer.Element {
 			return;
 		// init the found provider and start a login session
 		provider.init(this.redirectUri);
+		this.set('provider', provider.name);
 		OIDC.login({scope: this.scope, response_type: 'token id_token'});
 	}
 	
@@ -109,6 +111,14 @@ class OIDCLogin extends Polymer.Element {
 	
 	_internalLogin(e) {
 		this.login(e.model.item.name);
+	}
+	
+	_accessTokenReceived() {
+		if (!this.accessToken)
+			return;
+		window.requestAnimationFrame(function(elm) {
+			this.dispatchEvent(new CustomEvent('oidc-login-success',{ accessToken: this.accessToken }));
+		}.bind(this));
 	}
 }
 
