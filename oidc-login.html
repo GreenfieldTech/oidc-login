@@ -21,7 +21,7 @@
 <div hidden$="[[accessToken]]">
 	<slot name="login">
 		<template is="dom-repeat" items="[[providerList]]">
-			<paper-button on-click="_internalLogin">
+			<paper-button on-click="_internalLogin" raised>
 				Login<template is="dom-if" if="{{item.name}}"> with [[item.name]]</template>
 			</paper-button>
 		</template>
