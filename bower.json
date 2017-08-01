@@ -14,5 +14,21 @@
   },
   "resolutions": {
     "polymer": "^2.0.0"
-  }
+  },
+  "keywords": [
+    "OpenID Connect",
+    "authentication"
+  ],
+  "authors": [
+    "Oded Arbel <odeda@greenfield.tech",
+    "Oded Arbel <oded@geek.co.il>"
+  ],
+  "license": "MIT",
+   "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
