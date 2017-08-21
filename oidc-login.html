@@ -114,7 +114,7 @@ class OIDCLogin extends Polymer.Element {
 		if (m.data != 'oidc-login-callback-complete')
 			return;
 		m.source.postMessage('oidc-login-callback-complete-received','*');
-		window.removeEventLister('message', this._popupHandler);
+		window.removeEventListener('message', this._popupHandler);
 		delete this._popupHandler;
 	}
 	
